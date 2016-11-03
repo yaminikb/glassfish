@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2008-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2008-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -67,12 +67,23 @@ public class MainHelper {
     /*protected*/
 
     static void checkJdkVersion() {
+        int major = getMajorJdkVersion();
         int minor = getMinorJdkVersion();
-
-        if (minor < 7) {
-            logger.log(Level.SEVERE, LogFacade.BOOTSTRAP_INCORRECT_JDKVERSION, new Object[]{ 7, minor});
+        if (major < 9) {
+          if (minor < 7) {
+            logger.log(Level.SEVERE, LogFacade.BOOTSTRAP_INCORRECT_JDKVERSION, new Object[]{7, minor});
             System.exit(1);
+          }
         }
+    }
+
+    private static int getMajorJdkVersion() {
+      String jv = System.getProperty("java.version");
+      String[] split = jv.split("[\\._\\-]+");
+      if (split!=null && split.length > 0) {
+        return Integer.parseInt(split[0]);
+      }
+      return -1;
     }
 
     private static int getMinorJdkVersion() {

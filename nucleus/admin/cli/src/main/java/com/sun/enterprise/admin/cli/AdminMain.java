@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -211,10 +211,12 @@ public class AdminMain {
 
     protected int doMain(String[] args) {
         int minor = JDK.getMinor();
-
-        if (minor < 6) {
-            System.err.println(strings.get("OldJdk", "" + minor));
-            return ERROR;
+        int major = JDK.getMajor();
+        if (major<9) {
+            if (minor < 6) {
+                System.err.println(strings.get( "OldJdk", "" + minor));
+                return ERROR;
+            }
         }
 
         boolean trace = env.trace();

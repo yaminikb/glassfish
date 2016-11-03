@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2009-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2009-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,16 +54,16 @@ public final class JDK {
         String[] split = string.split("[\\._\\-]+");
 
         if (split.length > 0) {
-            major = new Integer(split[0]);
+            major = Integer.parseInt(split[0]);
         }
         if (split.length > 1) {
-            minor = new Integer(split[1]);
+            minor = Integer.parseInt(split[1]);
         }
         if (split.length > 2) {
-            subminor = new Integer(split[2]);
+            subminor = Integer.parseInt(split[2]);
         }
         if (split.length > 3) {
-            update = new Integer(split[3]);
+            update = Integer.parseInt(split[3]);
         }
     }
 
@@ -158,29 +158,52 @@ public final class JDK {
         minor = subminor = update = 0;
         try {
             String jv = System.getProperty("java.version");
+            //In JEP 223 java.specification.version will be a single number versioning , not a dotted versioning . So if we get a single
+            //integer as versioning we know that the JDK is post JEP 223
+            String javaSpecificationVersion = System.getProperty("java.specification.version");
+            String[] jsvSplit = javaSpecificationVersion.split("\\.");
+            if (jsvSplit.length == 1) {
+              String[] split = jv.split("[\\.\\-]+");
+              if (split!=null && split.length > 0) {
+                if (split.length > 0) {
+                  major = Integer.parseInt(split[0]);
+                }
+                if (split.length > 1) {
+                  minor = Integer.parseInt(split[1]);
+                }
+                if (split.length > 2) {
+                  subminor = Integer.parseInt(split[2]);
+                }
+                if (split.length > 3) {
+                  update = Integer.parseInt(split[3]);
+                }
+              }
 
-            if(!StringUtils.ok(jv))
+            } else {
+              if (!StringUtils.ok(jv))
                 return; // not likely!!
 
-            String[] ss = jv.split("\\.");
+              String[] ss = jv.split("\\.");
 
-            if(ss.length < 3 || !ss[0].equals("1"))
+              if (ss.length < 3 || !ss[0].equals("1"))
                 return;
 
-            major = Integer.parseInt(ss[0]);
-            minor = Integer.parseInt(ss[1]);
-            ss = ss[2].split("_");
+              major = Integer.parseInt(ss[0]);
+              minor = Integer.parseInt(ss[1]);
+              ss = ss[2].split("_");
 
-            if(ss.length < 1)
+              if (ss.length < 1)
                 return;
 
-            subminor = Integer.parseInt(ss[0]);
+              subminor = Integer.parseInt(ss[0]);
 
-            if(ss.length > 1)
+              if (ss.length > 1)
                 update = Integer.parseInt(ss[1]);
+            }
         }
         catch(Exception e) {
             // ignore -- use defaults
         }
+
     }
 }
