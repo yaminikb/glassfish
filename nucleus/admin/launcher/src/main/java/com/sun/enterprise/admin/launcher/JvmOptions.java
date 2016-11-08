@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2008-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2008-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -72,6 +72,10 @@ class JvmOptions {
             else if (s.startsWith("-X")) {
                 addXProp(s);
             }
+            //JDK9 specific options
+            else if(s.startsWith("--")){
+                addJdk9Prop(s);
+            }
             else if (s.startsWith("-")) {
                 addPlainProp(s);
             }
@@ -82,6 +86,10 @@ class JvmOptions {
         }
         filter(); // get rid of forbidden stuff
         setOsgiPort();
+    }
+
+    private void addJdk9Prop(String s) {
+        jdk9Props.add(s);
     }
 
     @Override
@@ -138,6 +146,7 @@ class JvmOptions {
                 ss.add("-D" + name);
             }
         }
+        ss.addAll(jdk9Props);
         return postProcessOrdering(ss);
     }
 
@@ -293,6 +302,7 @@ class JvmOptions {
     Map<String, String> xxProps = new HashMap<String, String>();
     Map<String, String> xProps = new HashMap<String, String>();
     Map<String, String> plainProps = new HashMap<String, String>();
+    List<String> jdk9Props = new LinkedList<>();
     int osgiPort = -1;
 
     private static class NameValue {
