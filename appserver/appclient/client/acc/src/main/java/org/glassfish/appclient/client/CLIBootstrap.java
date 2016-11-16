@@ -40,6 +40,7 @@
 
 package org.glassfish.appclient.client;
 
+import com.sun.enterprise.util.JDK;
 import com.sun.enterprise.util.LocalStringManager;
 import com.sun.enterprise.util.LocalStringManagerImpl;
 import com.sun.enterprise.util.OS;
@@ -309,17 +310,33 @@ public class CLIBootstrap {
          * Add the elements in this order so they appear in the generated
          * java command in the correct positions.
          */
-        elementsInOutputOrder = new CommandLineElement[] {
-            jvmValuedOptions,
-            jvmPropertySettings,
-            otherJVMOptions,
-            extDirs,
-            endorsedDirs,
-            accUnvaluedOptions,
-            accValuedOptions,
-            jvmMainSetting,
-            arguments
+        //In JDK 9 and later ext and endorsed directory removed .
+        int major = JDK.getMajor();
+        if(major >= 9) {
+            elementsInOutputOrder = new CommandLineElement[]{
+                    jvmValuedOptions,
+                    jvmPropertySettings,
+                    otherJVMOptions,
+                    accUnvaluedOptions,
+                    accValuedOptions,
+                    jvmMainSetting,
+                    arguments
             };
+        }
+        else
+        {
+            elementsInOutputOrder = new CommandLineElement[] {
+                    jvmValuedOptions,
+                    jvmPropertySettings,
+                    otherJVMOptions,
+                    extDirs,
+                    endorsedDirs,
+                    accUnvaluedOptions,
+                    accValuedOptions,
+                    jvmMainSetting,
+                    arguments
+            };
+        }
     }
 
     /**
