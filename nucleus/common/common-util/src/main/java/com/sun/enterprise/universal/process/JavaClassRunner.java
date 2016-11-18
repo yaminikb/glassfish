@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,7 @@
 package com.sun.enterprise.universal.process;
 
 import com.sun.enterprise.universal.io.SmartFile;
+import com.sun.enterprise.util.JDK;
 import com.sun.enterprise.util.OS;
 import java.io.*;
 import java.util.*;
@@ -69,6 +70,10 @@ public class JavaClassRunner {
         if(sysprops != null)
             for(String sysprop : sysprops) 
                 cmdline.add(sysprop);
+        int major = JDK.getMajor();
+        if (major>=9) {
+            cmdline.add(jdk9Arguments);
+        }
 
         cmdline.add(classname);
 
@@ -85,7 +90,9 @@ public class JavaClassRunner {
         return s != null && s.length() > 0;
     }
 
+
     private static final File javaExe;
+    private String jdk9Arguments="--add-modules=java.annotations.common";
 
     static{
         String javaName = "java";
