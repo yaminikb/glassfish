@@ -59,7 +59,6 @@
 package org.glassfish.web.loader;
 
 import com.sun.appserv.BytecodePreprocessor;
-import com.sun.appserv.ClassLoaderUtil;
 import com.sun.appserv.server.util.PreprocessorUtil;
 import com.sun.enterprise.util.io.FileUtils;
 import org.apache.naming.JndiPermission;

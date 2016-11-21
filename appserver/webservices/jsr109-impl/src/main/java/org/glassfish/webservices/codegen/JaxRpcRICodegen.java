@@ -40,7 +40,6 @@
 
 package org.glassfish.webservices.codegen;
 
-import com.sun.appserv.ClassLoaderUtil;
 import com.sun.enterprise.deployment.util.DOLUtils;
 import java.util.ArrayList;
 import java.util.Collection;
