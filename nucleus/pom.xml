@@ -124,7 +124,7 @@
         <module>grizzly</module>
         <module>deployment</module>
         <module>hibernate-validator</module>
-        <module>bhibernate-validator-cdi</module>
+        <module>hibernate-validator-cdi</module>
         <module>distributions</module>
         <module>security</module>
         <module>test-utils</module>
